@@ -10,12 +10,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from src.modules.document import Document
 
 
-class NotionCrawler:
+class NotionLoader:
     def __init__(self, driver: Optional[webdriver.Chrome] = None):
         # driver를 외부에서 주입받거나, read()에서 새롭게 생성합니다.
         self.driver = driver
 
-    def read(self, url: str) -> Document:
+    def load(self, source: str) -> Document:
         """
         노션 페이지를 크롤링하여 HTML 내용과 다운로드 파일들을 Document 객체로 반환합니다.
         """
@@ -36,9 +36,9 @@ class NotionCrawler:
             self.driver = webdriver.Chrome(options=chrome_options)
         else:
             # 외부에서 전달받은 driver에 옵션 적용은 별도 처리 필요
-            self.driver.get(url)
+            self.driver.get(source)
 
-        self.driver.get(url)
+        self.driver.get(source)
         time.sleep(1)
 
         # 페이지의 모든 콘텐츠 로드를 위해 스크롤
@@ -82,7 +82,7 @@ class NotionCrawler:
         attached_files = downloaded_files.copy()
         attached_files.append(html_file_path)
 
-        return Document(content=page_html, source=url, attached_file=attached_files, document_type="html")
+        return Document(content=page_html, source=source, attached_file=attached_files, document_type="html")
 
     def scroll_to_bottom(self, pause_time: int = 2):
         """
