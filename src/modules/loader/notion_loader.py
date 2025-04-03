@@ -7,22 +7,23 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-from src.modules.document import Document
+from src.modules.loader.docs import Docs
+from src.modules.loader.docs_loader import DocsLoader
 
 
-class NotionLoader:
+class NotionLoader(DocsLoader):
     def __init__(self, driver: Optional[webdriver.Chrome] = None):
         # driver를 외부에서 주입받거나, read()에서 새롭게 생성합니다.
         self.driver = driver
 
-    def load(self, source: str) -> Document:
+    def load(self, source: str) -> Docs:
         """
         노션 페이지를 크롤링하여 HTML 내용과 다운로드 파일들을 Document 객체로 반환합니다.
         """
         chrome_options = Options()
         # 다운로드 폴더를 './files'로 지정하는 옵션 설정
         prefs = {
-            "download.default_directory": os.path.abspath("./files"),
+            "download.default_directory": os.path.abspath("../files"),
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
@@ -69,7 +70,7 @@ class NotionLoader:
 
         # 페이지 HTML 저장 및 읽기
         page_html = self.driver.page_source
-        files_folder = os.path.abspath("./files")
+        files_folder = os.path.abspath("../files")
         html_file_path = os.path.join(files_folder, "page.html")
         with open(html_file_path, "w", encoding="utf-8") as html_file:
             html_file.write(page_html)
@@ -82,7 +83,7 @@ class NotionLoader:
         attached_files = downloaded_files.copy()
         attached_files.append(html_file_path)
 
-        return Document(content=page_html, source=source, attached_file=attached_files, document_type="html")
+        return Docs(content=page_html, source=source, attached_file=attached_files, document_type="html")
 
     def scroll_to_bottom(self, pause_time: int = 2):
         """

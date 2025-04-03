@@ -1,8 +1,6 @@
-import json
-
 from selenium import webdriver
 
-from src.modules.notion_loader import NotionLoader
+from src.modules.loader.notion_loader import NotionLoader
 
 if __name__ == "__main__":
     notion_url = "https://sincere-nova-ec6.notion.site/a8bbcb69d87c4c19aabee16c6a178286"

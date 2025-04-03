@@ -3,7 +3,7 @@ import pandas as pd
 from typing import Any, Optional, List
 
 
-class Document:
+class Docs:
     """
     Document 객체는 크롤링한 내용(content), 원본 데이터(source),
     그리고 연관 파일들(attached_file)을 관리합니다.
