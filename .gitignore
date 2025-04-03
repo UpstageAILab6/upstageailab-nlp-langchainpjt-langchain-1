@@ -1,0 +1,14 @@
+.idea
+.venv
+files
+*.log
+
+*.pyc
+__pycache__
+*.pyo
+*.pyd
+*.db
+*.html
+*.csv
+*.pdf
+*.docx
