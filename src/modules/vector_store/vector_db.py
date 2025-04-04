@@ -84,3 +84,10 @@ class Faiss(VectorStore):
         if self.vectorstore is None:
             raise ValueError("벡터 스토어가 초기화되지 않았습니다. 먼저 문서를 추가해주세요.")
         return self.vectorstore.similarity_search(query, k=k)
+
+def search_vector_store(vector_store, query: str):
+    """
+    전달받은 vector_store 인스턴스를 사용하여 주어진 질의(query)로 유사 청크를 검색합니다.
+    """
+    result = vector_store.similarity_search(query)
+    return result
