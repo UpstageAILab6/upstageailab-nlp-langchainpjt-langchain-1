@@ -1,0 +1,17 @@
+.idea
+.venv
+logs
+files
+*.log
+faiss
+*.pyc
+__pycache__
+*.pyo
+*.pyd
+*.db
+*.html
+*.csv
+*.pdf
+*.docx
+
+.env
