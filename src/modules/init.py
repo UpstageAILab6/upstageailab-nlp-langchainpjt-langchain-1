@@ -1,7 +1,7 @@
 from langchain_community.document_transformers import MarkdownifyTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from src.modules.db.vector_db import FaissDB
+from src.modules.vector_store.vector_db import FaissDB
 from src.modules.embedding.embedding import Embedding
 from src.modules.loader.notion_loader import NotionLoader, LawLoader
 
