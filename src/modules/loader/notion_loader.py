@@ -6,31 +6,37 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from langchain_core.documents import Document
 
-from src.modules.loader.docs import Docs
 from src.modules.loader.docs_loader import DocsLoader
+
+class LawLoader(DocsLoader):
+
+    def load(self, source: str) -> Document:
+        pass
 
 
 class NotionLoader(DocsLoader):
     def __init__(self, driver: Optional[webdriver.Chrome] = None):
         # driver를 외부에서 주입받거나, read()에서 새롭게 생성합니다.
         self.driver = driver
+        self.file_dir = "/Users/slowin/fc_upstage/competitions/langchain/upstageailab-nlp-langchainpjt-langchain-1/src/files"
 
-    def load(self, source: str) -> Docs:
+    def load(self, source: str) -> Document:
         """
         노션 페이지를 크롤링하여 HTML 내용과 다운로드 파일들을 Document 객체로 반환합니다.
         """
         chrome_options = Options()
         # 다운로드 폴더를 './files'로 지정하는 옵션 설정
         prefs = {
-            "download.default_directory": os.path.abspath("../files"),
+            "download.default_directory": self.file_dir,
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing.enabled": True
         }
         chrome_options.add_experimental_option("prefs", prefs)
         # 필요에 따라 헤드리스 모드 사용 가능
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless=new")
 
         # driver가 없는 경우 새롭게 생성
         if self.driver is None:
@@ -70,8 +76,7 @@ class NotionLoader(DocsLoader):
 
         # 페이지 HTML 저장 및 읽기
         page_html = self.driver.page_source
-        files_folder = os.path.abspath("../files")
-        html_file_path = os.path.join(files_folder, "page.html")
+        html_file_path = os.path.join(self.file_dir, "page.html")
         with open(html_file_path, "w", encoding="utf-8") as html_file:
             html_file.write(page_html)
         print(f"HTML 파일 저장됨: {html_file_path}")
@@ -83,7 +88,8 @@ class NotionLoader(DocsLoader):
         attached_files = downloaded_files.copy()
         attached_files.append(html_file_path)
 
-        return Docs(content=page_html, source=source, attached_file=attached_files, document_type="html")
+        return Document(page_content=page_html,
+                        metadata={"source": source, "attached_file": attached_files, "document_type": "html"})
 
     def scroll_to_bottom(self, pause_time: int = 2):
         """
@@ -120,13 +126,16 @@ class NotionLoader(DocsLoader):
         else:
             print("다운로드된 파일을 찾을 수 없습니다.")
 
-    def download_docx_files(self, download_folder: str = "./files") -> List[str]:
+    def download_docx_files(self, download_folder=None) -> List[str]:
         """
         노션 페이지 내 .docx 파일 블록을 클릭하여 파일 다운로드를 수행하고,
         다운로드된 파일 경로 목록을 반환합니다.
         """
-        if not os.path.exists(download_folder):
-            os.makedirs(download_folder)
+        # self.file_dir
+        if download_folder is None:
+            download_folder = self.file_dir
+        # if not os.path.exists(download_folder):
+        #     os.makedirs(download_folder)
         docx_files = []
         file_blocks = self.driver.find_elements(By.XPATH, "//div[contains(@class, 'notion-file-block')]")
         for block in file_blocks:

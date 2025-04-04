@@ -3,7 +3,7 @@
 logs
 files
 *.log
-
+faiss
 *.pyc
 __pycache__
 *.pyo
@@ -13,3 +13,5 @@ __pycache__
 *.csv
 *.pdf
 *.docx
+
+.env
