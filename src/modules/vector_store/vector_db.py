@@ -4,7 +4,7 @@ from langchain.docstore.document import Document
 from langchain_community.vectorstores import FAISS
 
 
-class VectorDB(ABC):
+class VectorStore(ABC):
     @abstractmethod
     def create_store(self, docs: List[Document]):
         """문서 리스트를 사용하여 벡터 스토어를 생성합니다."""
@@ -21,7 +21,7 @@ class VectorDB(ABC):
         pass
 
 
-class FaissDB(VectorDB):
+class Faiss(VectorStore):
     def __init__(self, embeddings, persist_directory: str = None):
         """
         FAISS 기반 벡터 스토어 구현체입니다.

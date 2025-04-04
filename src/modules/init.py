@@ -1,7 +1,7 @@
 from langchain_community.document_transformers import MarkdownifyTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from src.modules.vector_store.vector_db import FaissDB
+from src.modules.vector_store.vector_db import Faiss
 from src.modules.embedding.embedding import Embedding
 from src.modules.loader.notion_loader import NotionLoader, LawLoader
 
@@ -20,6 +20,6 @@ def init():
     chunked_docs = text_splitter.split_documents(converted_docs)
     if document is not None:
         embeddings = Embedding()
-        db = FaissDB(embeddings.model, persist_directory="./faiss")
+        db = Faiss(embeddings.model, persist_directory="./faiss")
         db.add_documents(chunked_docs)
 
