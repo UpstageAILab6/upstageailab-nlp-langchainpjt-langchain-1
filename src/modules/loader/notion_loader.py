@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import time
@@ -79,7 +80,7 @@ class NotionLoader(DocsLoader):
         html_file_path = os.path.join(self.file_dir, "page.html")
         with open(html_file_path, "w", encoding="utf-8") as html_file:
             html_file.write(page_html)
-        print(f"HTML 파일 저장됨: {html_file_path}")
+        # print(f"HTML 파일 저장됨: {html_file_path}")
 
         # driver 종료
         self.driver.quit()
@@ -87,9 +88,10 @@ class NotionLoader(DocsLoader):
         # Document 객체 생성: content에는 페이지 HTML, source에는 URL, attached_file에는 다운로드 파일 + HTML 파일
         attached_files = downloaded_files.copy()
         attached_files.append(html_file_path)
+        attached_files_str = json.dumps(attached_files, ensure_ascii=False)
 
         return Document(page_content=page_html,
-                        metadata={"source": source, "attached_file": attached_files, "document_type": "html"})
+                        metadata={"source": source, "attached_file": attached_files_str, "document_type": "html"})
 
     def scroll_to_bottom(self, pause_time: int = 2):
         """
@@ -122,7 +124,7 @@ class NotionLoader(DocsLoader):
             target_path = os.path.join(download_folder, target_file_name)
             if original_path != target_path:
                 os.rename(original_path, target_path)
-                print(f"파일 이름 변경 완료: {downloaded_file} -> {target_file_name}")
+                # print(f"파일 이름 변경 완료: {downloaded_file} -> {target_file_name}")
         else:
             print("다운로드된 파일을 찾을 수 없습니다.")
 
@@ -150,7 +152,7 @@ class NotionLoader(DocsLoader):
                 file_name = file_name.replace(" ", "+")
                 download_path = os.path.abspath(download_folder)
                 file_path = os.path.join(download_path, file_name)
-                print(f"다운로드 파일 경로: {file_path}")
+                # print(f"다운로드 파일 경로: {file_path}")
                 # 기본 파일명 비교 (숫자 접미사 무시)
                 base_file_name = re.sub(r' \(\d+\)', '', file_name)
                 existing_files = os.listdir(download_path)
@@ -163,11 +165,11 @@ class NotionLoader(DocsLoader):
                             break
                 if skip:
                     docx_files.append(os.path.join(download_path, file_name))
-                    print(f"{file_name} 이미 존재하여 다운로드 스킵.")
+                    # print(f"{file_name} 이미 존재하여 다운로드 스킵.")
                     continue
 
                 if ".docx" in file_name:
-                    print("다운로드 대상 파일:", file_name)
+                    # print("다운로드 대상 파일:", file_name)
                     original_handle = self.driver.current_window_handle
                     block.click()
                     time.sleep(1)  # 새 탭 열림 대기
@@ -178,7 +180,7 @@ class NotionLoader(DocsLoader):
                             if handle != original_handle:
                                 try:
                                     self.driver.switch_to.window(handle)
-                                    print("새 탭에서 자동 다운로드 진행중...")
+                                    # print("새 탭에서 자동 다운로드 진행중...")
                                     time.sleep(2)
                                     self.driver.close()
                                 except Exception as e:
@@ -197,5 +199,5 @@ class NotionLoader(DocsLoader):
         for file in docx_files:
             print(f"{file} 파일 다운로드 요청 완료.")
         print(f"다운로드된 파일 개수: {len(docx_files)}")
-        print(docx_files)
+        # print(docx_files)
         return docx_files
