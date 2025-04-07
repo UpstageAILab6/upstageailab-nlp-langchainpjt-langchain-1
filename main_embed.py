@@ -12,8 +12,8 @@ with open(TXT_PATH, "r", encoding="utf-8") as f:
 
 embedding = UpstageEmbeddings(model="solar-embedding-1-large")
 
-# ✅ LangChain 방식으로 저장
+#  LangChain 방식으로 저장
 vectorstore = FAISS.from_texts(texts=paragraphs, embedding=embedding)
 vectorstore.save_local(SAVE_DIR)
 
-print(f"✅ 총 {len(paragraphs)}개의 문단을 저장했습니다.")
+#print(f" 총 {len(paragraphs)}개의 문단을 저장했습니다.")
