@@ -1,9 +1,9 @@
+import datetime
 from abc import ABC, abstractmethod
 from typing import List, Optional, Union, Callable, Dict, Any
 from langchain.docstore.document import Document
 from langchain_community.vectorstores import FAISS
 from langchain_chroma import Chroma
-
 
 class VectorStore(ABC):
     @abstractmethod
@@ -121,10 +121,26 @@ class Faiss(VectorStore):
             raise ValueError("벡터 스토어가 초기화되지 않았습니다. 먼저 문서를 추가해주세요.")
         return self.vectorstore.similarity_search(query, k=k, filter=filter, **kwargs)
 
-
-def search_vector_store(vector_store, query: str):
+def search(category: str, vector_store, query: str):
     """
     전달받은 vector_store 인스턴스를 사용하여 주어진 질의(query)로 유사 청크를 검색합니다.
     """
-    result = vector_store.similarity_search(query)
-    return result
+    if category == "vacation":
+        return vector_store.similarity_search(query)
+    elif category == "timetable":
+        today = datetime.date.today()  # 오늘 날짜 가져오기
+        formatted_date = today.strftime("%Y%m%d")  # "YYYYMMDD" 형식으로 변환
+        q = f"""\
+today: {formatted_date}
+{query}
+"""
+
+        print(f"query: {q}")
+        print(f"formatted_date: {formatted_date}")
+        return vector_store.similarity_search(q, filter={"search_date": formatted_date})
+    elif category == "time":
+        return vector_store.similarity_search(query)
+    else:
+        # etc인 경우 기본 검색
+        return vector_store.similarity_search(query)
+

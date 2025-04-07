@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_community.document_transformers import MarkdownifyTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from src.modules.vector_store.vector_db import Faiss, ChromaStore
+from src.modules.vector_store.vector_store import Faiss, ChromaStore
 from src.modules.embedding.embedding import Embedding
 from src.modules.loader.notion_loader import NotionLoader, LawLoader
 import csv
@@ -184,6 +184,3 @@ def load_schedule_csv3(csv_path, pivot_month=11, next_year="2025"):
 if __name__ == "__main__":
     load_dotenv()
     init()
-    # csv_docs = load_schedule_csv2('../files/schedule.csv')
-    # print(csv_docs[5])
-    # print(csv_docs[60])

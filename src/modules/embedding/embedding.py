@@ -1,6 +1,4 @@
-import os
-
-from langchain_community.vectorstores import FAISS
+from langchain_chroma import Chroma
 from langchain_upstage import UpstageEmbeddings
 
 class Embedding:
@@ -19,10 +17,16 @@ class Embedding:
         # Implement the logic to embed a query using Upstage API
         pass
 
-def load_vector_store_once(faiss_dir: str = "faiss"):
+def load_vector_store_once(store_path):
     """
     FAISS 벡터스토어를 한 번 로드하여 반환합니다.
     """
     embeddings = UpstageEmbeddings(model="solar-embedding-1-large")
-    vector_store_instance = FAISS.load_local(faiss_dir, embeddings, allow_dangerous_deserialization=True)
-    return vector_store_instance
+    # vector_store_instance = FAISS.load_local(store_path, embeddings, allow_dangerous_deserialization=True)
+
+    return Chroma(
+        embedding_function=embeddings,
+        persist_directory=store_path,
+        collection_name="chroma",
+    )
+
