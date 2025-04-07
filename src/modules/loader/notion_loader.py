@@ -13,6 +13,11 @@ from langchain_core.documents import Document
 
 from src.modules.loader.docs_loader import DocsLoader
 
+class LectureLoader(DocsLoader):
+
+    def load(self, source: str) -> List[Document]:
+        pass
+
 
 class LawLoader(DocsLoader):
     def load(self, source: str) -> List[Document]:
