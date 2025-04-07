@@ -1,7 +1,10 @@
+import json
 import os
 import re
 import time
 from typing import List, Optional
+
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -10,17 +13,45 @@ from langchain_core.documents import Document
 
 from src.modules.loader.docs_loader import DocsLoader
 
-class LawLoader(DocsLoader):
+class LectureLoader(DocsLoader):
 
-    def load(self, source: str) -> Document:
+    def load(self, source: str) -> List[Document]:
         pass
 
+
+class LawLoader(DocsLoader):
+    def load(self, source: str) -> List[Document]:
+        # LawLoader.py 기준 두 단계 상위 디렉터리의 'files' 폴더에 있는 파일 경로
+        file_path = os.path.join(
+            os.path.dirname(__file__),  # 현재 파일이 있는 디렉터리
+            "..",  # 한 단계 상위 디렉터리
+            "..",  # 두 단계 상위 디렉터리
+            "files",  # 상위 디렉터리 아래 'files' 폴더
+            source  # 실제 파일 이름
+        )
+
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        chunk_size = 1000  # 원하는 chunk 길이
+        chunk_overlap = 300  # 앞뒤로 겹칠 부분
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
+            # separators=["제\d+조\()"],
+            # pattern=r'(?=제\d+조\()',  # lookahead 정규표현식
+        )
+        #
+        documents = splitter.split_documents([Document(page_content=content)])
+
+        return documents
 
 class NotionLoader(DocsLoader):
     def __init__(self, driver: Optional[webdriver.Chrome] = None):
         # driver를 외부에서 주입받거나, read()에서 새롭게 생성합니다.
         self.driver = driver
-        self.file_dir = "/Users/slowin/fc_upstage/competitions/langchain/upstageailab-nlp-langchainpjt-langchain-1/src/files"
+        self.file_dir = os.path.join(os.path.dirname(__file__), "..", "..", "files")
 
     def load(self, source: str) -> Document:
         """
@@ -79,7 +110,7 @@ class NotionLoader(DocsLoader):
         html_file_path = os.path.join(self.file_dir, "page.html")
         with open(html_file_path, "w", encoding="utf-8") as html_file:
             html_file.write(page_html)
-        print(f"HTML 파일 저장됨: {html_file_path}")
+        # print(f"HTML 파일 저장됨: {html_file_path}")
 
         # driver 종료
         self.driver.quit()
@@ -87,9 +118,10 @@ class NotionLoader(DocsLoader):
         # Document 객체 생성: content에는 페이지 HTML, source에는 URL, attached_file에는 다운로드 파일 + HTML 파일
         attached_files = downloaded_files.copy()
         attached_files.append(html_file_path)
+        attached_files_str = json.dumps(attached_files, ensure_ascii=False)
 
         return Document(page_content=page_html,
-                        metadata={"source": source, "attached_file": attached_files, "document_type": "html"})
+                        metadata={"source": source, "attached_file": attached_files_str, "document_type": "html"})
 
     def scroll_to_bottom(self, pause_time: int = 2):
         """
@@ -122,7 +154,7 @@ class NotionLoader(DocsLoader):
             target_path = os.path.join(download_folder, target_file_name)
             if original_path != target_path:
                 os.rename(original_path, target_path)
-                print(f"파일 이름 변경 완료: {downloaded_file} -> {target_file_name}")
+                # print(f"파일 이름 변경 완료: {downloaded_file} -> {target_file_name}")
         else:
             print("다운로드된 파일을 찾을 수 없습니다.")
 
@@ -150,7 +182,7 @@ class NotionLoader(DocsLoader):
                 file_name = file_name.replace(" ", "+")
                 download_path = os.path.abspath(download_folder)
                 file_path = os.path.join(download_path, file_name)
-                print(f"다운로드 파일 경로: {file_path}")
+                # print(f"다운로드 파일 경로: {file_path}")
                 # 기본 파일명 비교 (숫자 접미사 무시)
                 base_file_name = re.sub(r' \(\d+\)', '', file_name)
                 existing_files = os.listdir(download_path)
@@ -163,11 +195,11 @@ class NotionLoader(DocsLoader):
                             break
                 if skip:
                     docx_files.append(os.path.join(download_path, file_name))
-                    print(f"{file_name} 이미 존재하여 다운로드 스킵.")
+                    # print(f"{file_name} 이미 존재하여 다운로드 스킵.")
                     continue
 
                 if ".docx" in file_name:
-                    print("다운로드 대상 파일:", file_name)
+                    # print("다운로드 대상 파일:", file_name)
                     original_handle = self.driver.current_window_handle
                     block.click()
                     time.sleep(1)  # 새 탭 열림 대기
@@ -178,7 +210,7 @@ class NotionLoader(DocsLoader):
                             if handle != original_handle:
                                 try:
                                     self.driver.switch_to.window(handle)
-                                    print("새 탭에서 자동 다운로드 진행중...")
+                                    # print("새 탭에서 자동 다운로드 진행중...")
                                     time.sleep(2)
                                     self.driver.close()
                                 except Exception as e:
@@ -197,5 +229,5 @@ class NotionLoader(DocsLoader):
         for file in docx_files:
             print(f"{file} 파일 다운로드 요청 완료.")
         print(f"다운로드된 파일 개수: {len(docx_files)}")
-        print(docx_files)
+        # print(docx_files)
         return docx_files
