@@ -6,9 +6,6 @@ from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from openai import BaseModel
 
-from src.modules.vector_store.vector_store import search
-
-
 def extract_context_and_files(result):
     """
     검색 결과에서 중복 없이 context와 attached_file 정보를 추출합니다.
@@ -111,7 +108,7 @@ def handle_timetable_search(vector_store: Any, question: str):
 # ------
 
 def handle_legal_search(vector_store: Any, question: str):
-    result = search(category="legal", vector_store=vector_store, query=question)
-    context_text, attached_files = extract_context_and_files(result)
+    result = vector_store.similarity_search(question)
+    context_text, _ = extract_context_and_files(result)
 
-    return context_text, attached_files
+    return context_text, []

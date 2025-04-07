@@ -149,10 +149,6 @@ def get_legal_messages(context_text: str, attached_files: str, question: str):
             f"참조해야 하는 컨텍스트:\n{context_text}"
         ),
         (
-            "system",
-            f"첨부 파일들:\n{attached_files}"
-        ),
-        (
             "human",
             f"아래 질문에 대해 법령의 관점에서 답변해주세요:\n\n{question}"
         ),

@@ -54,6 +54,10 @@ def init():
     md_chunks = md_splitter.split_documents([md_docs])
     vector_store.add_documents(md_chunks)
 
+    # 법
+    law_docs = LawLoader().load('law.txt')
+    vector_store.add_documents(law_docs)
+
 def load_schedule_csv(csv_path):
     documents = []
     with open(csv_path, newline='', encoding='utf-8-sig') as csvfile:

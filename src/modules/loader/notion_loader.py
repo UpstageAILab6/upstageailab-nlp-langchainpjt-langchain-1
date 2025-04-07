@@ -3,6 +3,8 @@ import os
 import re
 import time
 from typing import List, Optional
+
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -11,17 +13,40 @@ from langchain_core.documents import Document
 
 from src.modules.loader.docs_loader import DocsLoader
 
+
 class LawLoader(DocsLoader):
+    def load(self, source: str) -> List[Document]:
+        # LawLoader.py 기준 두 단계 상위 디렉터리의 'files' 폴더에 있는 파일 경로
+        file_path = os.path.join(
+            os.path.dirname(__file__),  # 현재 파일이 있는 디렉터리
+            "..",  # 한 단계 상위 디렉터리
+            "..",  # 두 단계 상위 디렉터리
+            "files",  # 상위 디렉터리 아래 'files' 폴더
+            source  # 실제 파일 이름
+        )
 
-    def load(self, source: str) -> Document:
-        pass
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
 
+        chunk_size = 1000  # 원하는 chunk 길이
+        chunk_overlap = 300  # 앞뒤로 겹칠 부분
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
+            # separators=["제\d+조\()"],
+            # pattern=r'(?=제\d+조\()',  # lookahead 정규표현식
+        )
+        #
+        documents = splitter.split_documents([Document(page_content=content)])
+
+        return documents
 
 class NotionLoader(DocsLoader):
     def __init__(self, driver: Optional[webdriver.Chrome] = None):
         # driver를 외부에서 주입받거나, read()에서 새롭게 생성합니다.
         self.driver = driver
-        self.file_dir = "/Users/slowin/fc_upstage/competitions/langchain/upstageailab-nlp-langchainpjt-langchain-1/src/files"
+        self.file_dir = os.path.join(os.path.dirname(__file__), "..", "..", "files")
 
     def load(self, source: str) -> Document:
         """
