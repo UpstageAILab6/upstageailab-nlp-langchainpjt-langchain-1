@@ -48,7 +48,6 @@ class ChromaStore(VectorStore):
         """기존 벡터 스토어에 문서를 추가합니다."""
         self.vectorstore.add_documents(documents=docs)
 
-
     def similarity_search(self, query: str, k: int = 4, filter: Optional[Union[Callable, Dict[str, Any]]] = None) -> List[Document]:
         """주어진 쿼리와 유사한 문서를 검색합니다."""
         return self.vectorstore.similarity_search(query, k=k, filter=filter)

@@ -18,7 +18,7 @@ class Docs:
     def __repr__(self):
         return f"Document(content={self.content!r}, source={self.source!r}, attached_file={self.attached_file!r})"
 
-    def to_pandas(self):
+    def to_pandas(self) -> pd.DataFrame:
         """
         Document 객체를 pandas DataFrame으로 변환합니다.
         :return: pandas DataFrame
@@ -31,7 +31,7 @@ class Docs:
         }
         return pd.DataFrame(data)
 
-    def to_csv(self, file_path: str):
+    def to_csv(self, file_path: str) -> None:
         """
         주어진 파일 경로에 UTF-8 인코딩으로 CSV 파일을 작성합니다.
         :param file_path:

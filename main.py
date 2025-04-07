@@ -24,7 +24,7 @@ def main(vector_store):
 
             if category == "vacation":
                 context_text, attached_files = handle_vacation_search(vector_store, question)
-                messages = get_vacation_messages(context_text, [], question)
+                messages = get_vacation_messages(context_text, "", question)
             elif category == "timetable":
                 context_text, attached_files = handle_timetable_search(vector_store, question)
                 messages = get_timetable_messages(context_text, attached_files, question)
