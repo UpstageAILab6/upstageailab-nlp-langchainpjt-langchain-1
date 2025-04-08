@@ -41,6 +41,7 @@ print(qa_response["result"])
 #for i, doc in enumerate(qa_response["source_documents"], 1):
 #    print(f"\n 문단 {i}:\n{doc.page_content}")
 # 7. 관련 문단 요약 출력 
+
 def summarize_docs(docs):
     summarizer = ChatUpstage()
     summaries = []
@@ -50,7 +51,7 @@ def summarize_docs(docs):
         summaries.append(response.content.strip())
     return summaries
 
-print("\n📄 관련 문단 요약:")
+print("\n 관련 문단 요약:")
 summaries = summarize_docs(qa_response["source_documents"])
 for i, summary in enumerate(summaries, 1):
-    print(f"\n📘 요약 문단 {i}:\n{summary}")
+    print(f"\n 요약 문단 {i}:\n{summary}")
