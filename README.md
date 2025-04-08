@@ -53,7 +53,7 @@ LangChain 기반 패스트캠퍼스/Upstage AI Lab 6기 과정 전반적인 QA �
 
 ```bash
 # 1. 프로젝트 클론
-git clone https://github.com/your-org/langchain-qa-project.git
+git clone https://github.com/UpstageAILab6/upstageailab-nlp-langchainpjt-langchain-1.git
 cd langchain-qa-project
 
 # 2. 가상환경 설정 및 패키지 설치
