@@ -13,38 +13,36 @@ RAG(Retrieval-Augmented Generation) 구조를 바탕으로 문서 검색 및 응
 
 | 이름      | 역할             | GitHub                | 담당 기능                                         |
 |-----------|------------------|------------------------|--------------------------------------------------|
-| **김패캠** | 팀장 / 역할 | [GitHub 링크](#)       | LangChain 통합, FastAPI 백엔드 구성, API 설계 및 구조화 |
-| **박패캠** |  역할   | [GitHub 링크](#)       | CI/CD 파이프라인 구축, 도커화, 로컬/클라우드 환경 구성 |
-| **이패캠** | 역할 | [GitHub 링크](#)       | 문서 임베딩 처리, 벡터 DB 구축, LLM 파인튜닝           |
-| **최패캠** | 역할     | [GitHub 링크](#)       | 데이터 수집, 전처리, DVC 및 S3 데이터 관리            |
+| **강태화** | 팀장 / 역할 | [GitHub 링크](#)       | 아키텍쳐 구조 설게, 휴가/출석대장 작성법과 과정시간표 데이터 수집 및 임베딩, Langchain 통합 |
+| **정혜린** |  역할   | [https://github.com/jhyerin31](#)       | 온라인 강의 데이터 수집 및 임베딩, LCEL 구현  |
+| **정인복** | 역할 | [GitHub 링크](#)       | 내일배움카드 관련 법령 데이터 수집 및 임베딩, 프롬프트 출력 요약 |
+| **진우재** | 역할     | [GitHub 링크](#)       |            |
+| **박진신** | 역할     | [GitHub 링크](#)       |               |
 
 ---
 
 # **파이프라인 워크플로우**
 
-LangChain 기반 문서 QA 시스템의 구축 및 운영을 위한 파이프라인입니다.
+LangChain 기반 패스트캠퍼스/Upstage AI Lab 6기 과정 전반적인 QA 시스템의 구축 및 운영을 위한 파이프라인입니다.
 
 ## **1. 비즈니스 문제 정의**
-- 내부 문서에 대한 빠르고 정확한 자동 응답 시스템 구축
-- 고객지원 및 사내 지식관리의 효율성 증대
-- KPI: 응답 정확도, 평균 응답 시간, 사용자 만족도
+- 다양한 소스로 존재하는 여러 문서들을 필요 시 마다 어디있는지, 어떻게 작성해야하는지 등 일일이 찾는것에 대한 번거로움을 느낌 
+- 부트캠프 수강과 관련된 QA Engine 생성으로 업무 효율성 증대 기대
 
 ## **2. 데이터 수집 및 전처리**
 1. **데이터 수집**
-   - Notion, PDF, 사내 위키 등에서 문서 수집 후 S3 저장
+   - 휴가/출석 대장 작성법 html, 내일배움카드 관련 법령 PDF, 강의 시간표 csv, 과정 스케줄.xlsx 문서 데이터 수집 
 2. **문서 파싱 및 전처리**
-   - LangChain의 DocumentLoader 사용
+   - 각 데이터 소스에 따라 LangChain의 DocumentLoader 사용
    - Chunking, Text Cleaning
 3. **임베딩 및 벡터화**
    - OpenAI / HuggingFace Embedding 모델 사용
-   - FAISS / Weaviate / Qdrant 등을 활용한 벡터 DB 구축
-4. **데이터 버전 관리**
-   - DVC 및 S3로 문서 버전 관리
+   - FAISS / Chroma  활용한 벡터 DB 구축
 
 ## **3. LLM 및 RAG 파이프라인 구성**
 - LangChain의 RetrievalQA 모듈 활용
 - Chain 구성: Embedding → Retriever → LLM(응답)
-- LLM: OpenAI GPT-4 / Mistral / Claude 등 선택 가능
+- LLM: OpenAI GPT-4 / UpstageChat 등 선택 가능
 
 ## **4. 모델 학습 및 실험 추적**
 - 필요 시, 사내 문서로 파인튜닝된 LLM 학습
@@ -101,12 +99,9 @@ python main.py
 
 ### **협업 툴**
 - **소스 관리:** GitHub
-- **프로젝트 관리:** Jira, Confluence
 - **커뮤니케이션:** Slack
-- **버전 관리:** Git
 
 ### **사용 도구**
-- **CI/CD:** GitHub Actions, Jenkins
 - **LLM 통합:** LangChain, OpenAI API, HuggingFace
 - **실험 관리:** MLflow, Optuna
 - **데이터 관리:** DVC, AWS S3
