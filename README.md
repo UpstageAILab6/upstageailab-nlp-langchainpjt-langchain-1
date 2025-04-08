@@ -1,5 +1,5 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/5BS4k7bR)
-# **LangChain 프로젝트** 
+# **LangChain 프로젝트** *(예시)*
 
 LangChain을 활용한 **부트캠프 RAG봇** 구축 프로젝트입니다.  
 본 프로젝트는 부트캠프 교육 과정에서 제공되는 다양한 문서(강의 시간표, 강의 리스트, 법령, 슬랙 공지 등)를 기반으로, 사용자 질문에 자동으로 응답할 수 있는 Q&A 시스템을 구현하는 데 목적이 있습니다.
@@ -7,28 +7,26 @@ LangChain을 활용한 **부트캠프 RAG봇** 구축 프로젝트입니다.
 **부트캠프 RAG봇**은 Retrieval-Augmented Generation(RAG) 구조를 기반으로, 사용자 질문을 적절한 도메인(예: 강의, 문서, 일정 등)으로 분류한 뒤, 관련 정보를 검색하고 자연어로 응답을 생성합니다.  
 질문 도메인에 따라 라우팅된 체인에서 각기 Search로직을 통해 벡터 저장소 및 프롬프트를 사용함으로써, 보다 정확하고 문맥에 맞는 답변을 제공할 수 있도록 설계되었습니다.
 
-전체 시스템은 LangChain 프레임워크를 중심으로 구성되었으며, 다양한 도메인에 대한 확장성과 실험 가능성을 고려한 구조로 구현되었습니다.
-
-- **프로젝트 기간:** 2025.03.01 ~ 2025.04.15  
+- **프로젝트 기간:** 2025.04.02 ~ 2025.04.08  
 - **주제:** LangChain 기반 문서 검색 + Q&A 자동화 시스템  
 
 ---
 
 # **팀원 소개**
 
-| 이름      | 역할                        | GitHub                | 담당 기능                                         |
-|---------|---------------------------|------------------------|--------------------------------------------------|
-| **강태화** | 팀장 | [GitHub 링크](#)       | 아키텍처 구조 설계 데이터 수집 및 임베딩 |
-| **정혜린** | 팀원                        | [GitHub 링크](#)       | 전체 온라인 강의 리스트에 대한 QA Engine 구축 |
-| **정인복** | 팀원                        | [GitHub 링크](#)       | 법령에 대한 QA Engine 구축           |
-| **진우재** | 팀원                        | [GitHub 링크](#)       |             |
-| **박진신** | 팀원                        | [GitHub 링크](#)       |             |
+| 이름      | 역할             | GitHub                | 담당 기능                                         |
+|-----------|------------------|------------------------|--------------------------------------------------|
+| **강태화** |  팀장 | [GitHub 링크](#)| 아키텍쳐 구조 설게, 휴가/출석대장 작성법과 과정시간표 데이터 수집 및 임베딩, Langchain 통합 |
+| **정혜린** |  팀원 | [https://github.com/jhyerin31](#) | 온라인 강의 데이터 수집 및 임베딩, LCEL 구현  |
+| **정인복** |  팀원 | [GitHub 링크](#)| 내일배움카드 관련 법령 데이터 수집 및 임베딩, 프롬프트 출력 요약 |
+| **진우재** |  팀원 | [GitHub 링크](#)|            |
+| **박진신** |  팀원 | [GitHub 링크](#)|               |
 
 ---
 
 # **파이프라인 워크플로우**
 
-LangChain 기반 문서 QA 시스템의 구축 및 운영을 위한 파이프라인입니다.
+LangChain 기반 패스트캠퍼스/Upstage AI Lab 6기 과정 전반적인 QA 시스템의 구축 및 운영을 위한 파이프라인입니다.
 
 ## **1. 비즈니스 문제 정의**
 - 내부 문서가 다양한 채널에 분산되어 있어 정보 탐색에 어려움 존재
@@ -47,8 +45,7 @@ LangChain 기반 문서 QA 시스템의 구축 및 운영을 위한 파이프라
    - Vector Store 재정의로 확장성 확보
 4. **데이터 저장**
    - Embedding Vector 저장소 → LLM Context로 활용
-
-
+     
 ## **3. LLM 및 RAG 파이프라인 구성**
 - LangChain 기반 RetrievalQA 구성
 - Domain Routing 체계 구축:
@@ -71,7 +68,7 @@ LangChain 기반 문서 QA 시스템의 구축 및 운영을 위한 파이프라
 1. **응답 예시 검토 및 Hallucination 확인**
 2. **법령 응답 요약 기능 제안 → 가독성 개선 방향**
 3. **향후 슬랙 피드백 기반 자동 개선 루프 구현 예정**
-
+   
 ---
 
 ## **프로젝트 실행 방법**
@@ -81,7 +78,7 @@ LangChain 기반 문서 QA 시스템의 구축 및 운영을 위한 파이프라
 
 ```bash
 # 1. 프로젝트 클론
-git clone git@github.com:UpstageAILab6/upstageailab-nlp-langchainpjt-langchain-1.git
+git clone https://github.com/UpstageAILab6/upstageailab-nlp-langchainpjt-langchain-1.git
 cd langchain-qa-project
 
 # 2. 가상환경 설정 및 패키지 설치
@@ -90,7 +87,10 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # 3. 환경 변수 설정
-.env.template 파일 참고하여 정의
+**.env.template 파일 참고하여 정의**
+export OPENAI_API_KEY=your-api-key
+export UPSTAGE_API_KEY=your-api-key
+export HUGGINGFACEHUB_API_KEY=your-api-key
 
 # 4. 실행
 ## 자료 수집
@@ -107,7 +107,7 @@ streamlit run app.py
 ### **활용 장비**
 - **서버:** Local PC
 - **개발 환경:** MacOS, Windows, Linux
-
+- 
 ### **협업 툴**
 - **소스 관리:** GitHub
 - **프로젝트 관리:** GitHub
@@ -115,7 +115,6 @@ streamlit run app.py
 - **버전 관리:** Git
 
 ### **사용 도구**
-- **CI/CD:** GitHub
 - **LLM 통합:** LangChain, OpenAI API, HuggingFace
 - **데이터 관리:** Local file system
 - **배포 및 운영:** Local Terminal 
