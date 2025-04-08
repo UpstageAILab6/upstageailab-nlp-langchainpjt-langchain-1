@@ -25,7 +25,7 @@ class VectorDBStore:
         self.split_documents = []  # 분할된 문서 저장
         self.vectorstore = None  # FAISS 저장소
 
-    def load_html(self):
+    def load_html(self) -> None:
         """HTML 파일을 읽고 텍스트로 변환하여 저장"""
         with open(self.html_file_path, "r", encoding="utf-8") as f:
             html_content = f.read()
@@ -35,23 +35,23 @@ class VectorDBStore:
         with open(self.text_file_path, "w", encoding="utf-8") as f:
             f.write(soup.prettify())
 
-    def load_documents(self):
+    def load_documents(self) -> None:
         """텍스트 문서를 로드"""
         loader = TextLoader(self.text_file_path)
         self.docs = loader.load()
 
-    def mdtrans(self):
+    def mdtrans(self) -> None:
         """Markdown 변환"""
         md = MarkdownifyTransformer()
         self.docs = md.transform_documents(self.docs)
 
-    def preprocess_text(self, text):
+    def preprocess_text(self, text) -> str:
         """텍스트 전처리: 불필요한 태그 및 정보 제거"""
         text = re.sub(r"!\[.*?\]\(.*?\)", "", text)  # 이미지 태깅 제거
         text = re.sub(r'\n\n\d+(\.\d+)?(KB|MB|GB)', '', text)  # 파일 크기 제거
         return text
 
-    def split_preprocess_documents(self):
+    def split_preprocess_documents(self) -> None:
         """문서 전처리 수행"""
         self.preprocessed_docs = []
         for doc in self.docs:
@@ -67,25 +67,10 @@ class VectorDBStore:
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=120, chunk_overlap=50)
         self.split_documents = text_splitter.split_documents(self.preprocessed_docs)
     '''
-
-    def create_vectordb(self):
+    def create_vectordb(self) -> FAISS:
         """FAISS 벡터DB 생성"""
         if not self.split_documents:
             raise ValueError("문서가 분할되지 않았습니다. 먼저 split_documents()를 실행하세요.")
 
         self.vectorstore = FAISS.from_documents(documents=self.split_documents, embedding=self.embeddings)
-        print(self.vectorstore.index_to_docstore_id) #생성 확인
         return self.vectorstore
-
-# if __name__ == "__main__":
-#     html_file_path = "/home/data/Langchain/qa_engine_test/data/files/page.html"
-#     vectordb_store = VectorDBStore(html_file_path)
-#
-#     # 실행 순서
-#     vectordb_store.load_html()
-#     vectordb_store.load_documents()
-#     vectordb_store.mdtrans()
-#     vectordb_store.split_preprocess_documents()
-#     vectorstore = vectordb_store.create_vectordb()
-#
-#     print("FAISS 벡터DB 생성 완료!")

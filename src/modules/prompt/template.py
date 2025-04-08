@@ -1,9 +1,10 @@
 import datetime
+from typing import List, Tuple
 
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 
 
-def build_prompt(context: str, attached_files: str, query: str):
+def build_prompt(context: str, attached_files: str, query: str)-> List[Tuple[str, str]]:
     """
     주어진 context, 첨부 파일 정보와 질의를 바탕으로 Langchain ChatPromptTemplate을 생성합니다.
     """
@@ -37,7 +38,7 @@ def build_prompt(context: str, attached_files: str, query: str):
     return prompt
 
 
-def get_vacation_messages(context_text: str, attached_files: str, question: str):
+def get_vacation_messages(context_text: str, attached_files: str, question: str) -> List[Tuple[str, str]]:
     """
     '휴가' 카테고리에 특화된 메시지 템플릿을 반환합니다.
     """
@@ -72,7 +73,8 @@ def get_vacation_messages(context_text: str, attached_files: str, question: str)
     ]
     return messages
 
-def get_timetable_messages(context_text: str, attached_files: str, question: str):
+
+def get_timetable_messages(context_text: str, attached_files: str, question: str) -> List[Tuple[str, str]]:
     """
     '시간표' 카테고리에 특화된 메시지 템플릿을 반환합니다.
     """
@@ -131,7 +133,8 @@ def get_timetable_messages(context_text: str, attached_files: str, question: str
 
     return messages
 
-def get_legal_messages(context_text: str, attached_files: str, question: str):
+
+def get_legal_messages(context_text: str, attached_files: str, question: str) -> List[Tuple[str, str]]:
     """
     '법령' 카테고리에 특화된 메시지 템플릿.
     """

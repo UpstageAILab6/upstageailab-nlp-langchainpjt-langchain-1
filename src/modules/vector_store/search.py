@@ -1,12 +1,13 @@
 import datetime
-from typing import Any, List
+from typing import Any, List, Tuple
 
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from openai import BaseModel
 
-def extract_context_and_files(result):
+
+def extract_context_and_files(result) -> Tuple[str, str]:
     """
     검색 결과에서 중복 없이 context와 attached_file 정보를 추출합니다.
     """
@@ -29,7 +30,7 @@ def extract_context_and_files(result):
     return combined_context, attached_files_str
 
 
-def handle_vacation_search(vector_store: Any, question: str):
+def handle_vacation_search(vector_store: Any, question: str) -> Tuple[str, str]:
     """
     실제로 vacation 검색을 실행하고,
     문맥(context) 및 파일 정보까지 추출해 반환.
@@ -46,7 +47,7 @@ class DateArray(BaseModel):
     dates: List[str]
 
 
-def handle_timetable_search(vector_store: Any, question: str):
+def handle_timetable_search(vector_store: Any, question: str) -> Tuple[str, str]:
     # 1. 오늘 날짜를 "YYYY-MM-DD" 형식으로 계산
     # 한국 요일 배열(월, 화, 수, 목, 금, 토, 일)
     weekdays_kr = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
@@ -104,11 +105,8 @@ def handle_timetable_search(vector_store: Any, question: str):
 
     return context_text, files
 
-
-# ------
-
-def handle_legal_search(vector_store: Any, question: str):
+def handle_legal_search(vector_store: Any, question: str) -> Tuple[str, str]:
     result = vector_store.similarity_search(question)
     context_text, _ = extract_context_and_files(result)
 
-    return context_text, []
+    return context_text, ""

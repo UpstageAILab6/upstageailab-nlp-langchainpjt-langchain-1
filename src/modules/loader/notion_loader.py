@@ -53,7 +53,7 @@ class NotionLoader(DocsLoader):
         self.driver = driver
         self.file_dir = os.path.join(os.path.dirname(__file__), "..", "..", "files")
 
-    def load(self, source: str) -> Document:
+    def load(self, source: str) -> List[Document]:
         """
         노션 페이지를 크롤링하여 HTML 내용과 다운로드 파일들을 Document 객체로 반환합니다.
         """
@@ -120,10 +120,10 @@ class NotionLoader(DocsLoader):
         attached_files.append(html_file_path)
         attached_files_str = json.dumps(attached_files, ensure_ascii=False)
 
-        return Document(page_content=page_html,
-                        metadata={"source": source, "attached_file": attached_files_str, "document_type": "html"})
+        return [Document(page_content=page_html,
+                        metadata={"source": source, "attached_file": attached_files_str, "document_type": "html"})]
 
-    def scroll_to_bottom(self, pause_time: int = 2):
+    def scroll_to_bottom(self, pause_time: int = 2) -> None:
         """
         페이지를 끝까지 스크롤하여 동적 로딩된 콘텐츠를 모두 표시하도록 합니다.
         """
@@ -136,7 +136,7 @@ class NotionLoader(DocsLoader):
                 break
             last_height = new_height
 
-    def wait_for_download_and_rename(self, download_folder: str, target_file_name: str, timeout: int = 30):
+    def wait_for_download_and_rename(self, download_folder: str, target_file_name: str, timeout: int = 30) -> None:
         """
         download_folder에서 .docx 파일이 다운로드 완료될 때까지 대기 후,
         가장 최근에 다운로드된 .docx 파일을 target_file_name으로 rename합니다.

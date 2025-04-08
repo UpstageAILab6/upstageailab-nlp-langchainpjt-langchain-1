@@ -6,10 +6,6 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from dotenv import load_dotenv
 
-from src.modules.model.retriever import get_retriever
-
-# from retriever import retriever
-
 # 환경 변수 로드
 load_dotenv()
 hb_api_key = os.getenv("HUGGINGFACEHUB_API_TOKEN")
@@ -51,12 +47,6 @@ class PromptLLM:
                 | StrOutputParser()
         )
 
-    def generate_response(self, question):
+    def generate_response(self, question) -> str:
         """질문을 입력하면 체인을 실행하고 응답을 반환"""
         return self.chain.invoke(question)
-
-# if __name__ == "__main__":
-#     llm_model = PromptLLM(hb_api_key, get_retriever())
-#     query = "휴가 폼 알려줘"
-#     response = llm_model.generate_response(query)
-#     print("\n AI 응답:", response)
