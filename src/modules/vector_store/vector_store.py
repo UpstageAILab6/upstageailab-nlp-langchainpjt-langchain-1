@@ -1,24 +1,23 @@
 import datetime
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union, Callable, Dict, Any
+from typing import List, Optional, Union, Callable, Dict, Any, Iterable
 from langchain.docstore.document import Document
 from langchain_community.vectorstores import FAISS
 from langchain_chroma import Chroma
 
 class VectorStore(ABC):
     @abstractmethod
-    def create_store(self, docs: List[Document]):
+    def create_store(self, docs: Iterable[Document]):
         """문서 리스트를 사용하여 벡터 스토어를 생성합니다."""
         pass
 
     @abstractmethod
-    def add_documents(self, docs: List[Document]):
+    def add_documents(self, docs: Iterable[Document]):
         """기존 벡터 스토어에 문서를 추가합니다."""
         pass
 
     @abstractmethod
-    def similarity_search(self, query: str, k: int = 4, filter: Optional[Union[Callable, Dict[str, Any]]] = None, ) -> \
-            List[Document]:
+    def similarity_search(self, query: str, k: int = 4, filter: Optional[Union[Callable, Dict[str, Any]]] = None, ) -> Iterable[Document]:
         """주어진 쿼리와 유사한 문서를 검색합니다."""
         pass
 
@@ -40,11 +39,11 @@ class ChromaStore(VectorStore):
             persist_directory=persist_directory,  # Where to save data locally, remove if not necessary
         )
 
-    def create_store(self, docs: List[Document]):
+    def create_store(self, docs: Iterable[Document]):
         """문서 리스트를 사용하여 Chroma 벡터 스토어를 생성합니다."""
         pass
 
-    def add_documents(self, docs: List[Document]):
+    def add_documents(self, docs: Iterable[Document]):
         """기존 벡터 스토어에 문서를 추가합니다."""
         self.vectorstore.add_documents(documents=docs)
 
@@ -75,7 +74,7 @@ class Faiss(VectorStore):
             except Exception as e:
                 print("저장된 벡터 스토어가 없습니다. 새로 생성합니다.")
 
-    def create_store(self, docs: List[Document]):
+    def create_store(self, docs: Iterable[Document]):
         """
         주어진 문서 리스트를 사용하여 FAISS 벡터 스토어를 생성합니다.
 
@@ -87,7 +86,7 @@ class Faiss(VectorStore):
             self.vectorstore.save_local(self.persist_directory)
             print(f"벡터 스토어를 '{self.persist_directory}'에 저장했습니다.")
 
-    def add_documents(self, docs: List[Document]):
+    def add_documents(self, docs: Iterable[Document]):
         """
         벡터 스토어에 문서를 추가합니다. 아직 생성되지 않았다면, 먼저 벡터 스토어를 생성합니다.
 
@@ -119,6 +118,8 @@ class Faiss(VectorStore):
         if self.vectorstore is None:
             raise ValueError("벡터 스토어가 초기화되지 않았습니다. 먼저 문서를 추가해주세요.")
         return self.vectorstore.similarity_search(query, k=k, filter=filter, **kwargs)
+
+
 
 def search(category: str, vector_store, query: str):
     """

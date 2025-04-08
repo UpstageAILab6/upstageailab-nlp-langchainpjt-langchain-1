@@ -8,7 +8,7 @@ from src.modules.prompt.template import get_vacation_messages, get_timetable_mes
 
 from src.modules.router.question_router import route_question
 from src.modules.vector_store.search import handle_vacation_search, handle_timetable_search, handle_legal_search
-from src.modules.vector_store.vector_store import ChromaStore
+from src.modules.vector_store.vector_store import ChromaStore, VectorStore
 
 
 def main(vector_store):
@@ -52,7 +52,8 @@ if __name__ == "__main__":
     configure_upstage_api()
     embeddings = Embedding()
     store_path = "src/chroma"
-    vector_store = ChromaStore(embeddings.model, persist_directory=store_path)
+
+    vector_store: VectorStore = ChromaStore(embeddings.model, persist_directory=store_path)
 
     main(vector_store)
 
