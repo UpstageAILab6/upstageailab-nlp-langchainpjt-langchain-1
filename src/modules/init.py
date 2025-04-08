@@ -7,7 +7,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from src.modules.vector_store.vector_store import Faiss, ChromaStore
 from src.modules.embedding.embedding import Embedding
-from src.modules.loader.notion_loader import NotionLoader, LawLoader, LectureLoader
+from src.modules.loader.notion_loader import NotionLoader, LawLoader, LectureLoader, MarkDownLoader, CSVLoader
 import csv
 from langchain_core.documents import Document
 
@@ -37,16 +37,16 @@ def init():
         vector_store.add_documents(chunked_docs)
 
     # 시간표
-    csv_docs: List[Document] = load_schedule_csv_2('../files/schedule.csv')
+    csv_docs = load_schedule_csv_2('../files/schedule.csv')
     vector_store.add_documents(csv_docs)
 
     # 강의 시간표
-    csv_docs = load_schedule_csv('../files/online_lecture.csv')
+    csv_docs = CSVLoader().load('../files/online_lecture.csv')
     vector_store.add_documents(csv_docs)
 
     # 슬랙 활용법
-    md_docs = load_markdown_file('../files/slack.md')
-    md_chunks = md_splitter.split_documents([md_docs])
+    md_docs = MarkDownLoader().load('../files/slack.md')
+    md_chunks = md_splitter.split_documents(md_docs)
     vector_store.add_documents(md_chunks)
     # input, output 정의가 되어야됨
 

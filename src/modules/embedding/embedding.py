@@ -2,10 +2,6 @@ from langchain_chroma import Chroma
 from langchain_upstage import UpstageEmbeddings
 
 class Embedding:
-    """
-    Upstage Embeddings wrapper for Langchain.
-    """
-
     def __init__(self):
         self.model = UpstageEmbeddings(model="solar-embedding-1-large")
 

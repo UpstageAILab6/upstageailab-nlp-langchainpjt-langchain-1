@@ -1,8 +1,9 @@
+import csv
 import json
 import os
 import re
 import time
-from typing import List, Optional
+from typing import List, Optional, Iterable
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from selenium import webdriver
@@ -15,12 +16,11 @@ from src.modules.loader.docs_loader import DocsLoader
 
 class LectureLoader(DocsLoader):
 
-    def load(self, source: str) -> List[Document]:
+    def load(self, source: str) -> Iterable[Document]:
         pass
 
-
 class LawLoader(DocsLoader):
-    def load(self, source: str) -> List[Document]:
+    def load(self, source: str) -> Iterable[Document]:
         # LawLoader.py 기준 두 단계 상위 디렉터리의 'files' 폴더에 있는 파일 경로
         file_path = os.path.join(
             os.path.dirname(__file__),  # 현재 파일이 있는 디렉터리
@@ -231,3 +231,29 @@ class NotionLoader(DocsLoader):
         print(f"다운로드된 파일 개수: {len(docx_files)}")
         # print(docx_files)
         return docx_files
+
+class MarkDownLoader(DocsLoader):
+    def load(self, source: str) -> Iterable[Document]:
+        """
+        마크다운 파일을 읽어 Document 객체로 반환합니다.
+        """
+        with open(source, 'r', encoding='utf-8') as file:
+            content = file.read()
+        return [Document(page_content=content)]
+
+class CSVLoader(DocsLoader):
+    def load(self, source: str) -> Iterable[Document]:
+        """
+        CSV 파일을 읽어 Document 객체로 반환합니다.
+        """
+        documents = []
+        with open(source, newline='', encoding='utf-8-sig') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                date = row.get('date', '').strip() or '날짜 없음'
+                timetable = row.get('timetable', '').strip()
+                content = f"Date: {date}\nTimetable: {timetable}"
+                documents.append(Document(page_content=content))
+        return documents
+
+

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import Iterable
 
 from langchain_core.documents import Document
 
@@ -10,7 +10,7 @@ class DocsLoader(ABC):
     """
 
     @abstractmethod
-    def load(self, source: str) -> List[Document]:
+    def load(self, source: str) -> Iterable[Document]:
         """
         주어진 source(예: URL, Path)로부터 문서를 로드하여 Document 객체로 반환합니다.
         """
