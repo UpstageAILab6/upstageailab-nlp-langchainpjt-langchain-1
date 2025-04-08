@@ -1,6 +1,5 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/5BS4k7bR)
-# **LangChain 프로젝트** *(예시)*
-
+# **LangChain 프로젝트**
 LangChain을 활용한 **부트캠프 RAG봇** 구축 프로젝트입니다.  
 본 프로젝트는 부트캠프 교육 과정에서 제공되는 다양한 문서(강의 시간표, 강의 리스트, 법령, 슬랙 공지 등)를 기반으로, 사용자 질문에 자동으로 응답할 수 있는 Q&A 시스템을 구현하는 데 목적이 있습니다.
 
