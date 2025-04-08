@@ -1,10 +1,10 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/5BS4k7bR)
 # **LangChain 프로젝트** *(예시)*
 
-LangChain과 MLOps 기술을 활용하여, 사내 문서 기반 Q&A 시스템을 구축하는 프로젝트입니다.  
-RAG(Retrieval-Augmented Generation) 구조를 바탕으로 문서 검색 및 응답 시스템을 구현하고, 전체 모델 생애주기를 관리 가능한 파이프라인으로 구성했습니다.
+LangChain를 활용하여, 실제로 패스트캠퍼스/Upstage AI Lab 6기 수강 과정 문서 기반 Q&A 시스템을 구축하는 프로젝트입니다.  
+RAG(Retrieval-Augmented Generation) 구조를 바탕으로 문서 검색 및 응답 시스템을 구현하였습니다.
 
-- **프로젝트 기간:** 2025.03.01 ~ 2025.04.15  
+- **프로젝트 기간:** 2025.04.02 ~ 2025.04.08  
 - **주제:** LangChain 기반 문서 검색 + Q&A 자동화 시스템  
 
 ---
@@ -13,11 +13,11 @@ RAG(Retrieval-Augmented Generation) 구조를 바탕으로 문서 검색 및 응
 
 | 이름      | 역할             | GitHub                | 담당 기능                                         |
 |-----------|------------------|------------------------|--------------------------------------------------|
-| **강태화** | 팀장 | [GitHub 링크](#)| 아키텍쳐 구조 설게, 휴가/출석대장 작성법과 과정시간표 데이터 수집 및 임베딩, Langchain 통합 |
-| **정혜린** | 팀원| [https://github.com/jhyerin31](#) | 온라인 강의 데이터 수집 및 임베딩, LCEL 구현  |
-| **정인복** | 팀원 | [GitHub 링크](#)| 내일배움카드 관련 법령 데이터 수집 및 임베딩, 프롬프트 출력 요약 |
-| **진우재** | 팀원 | [GitHub 링크](#)|            |
-| **박진신** | 팀원 | [GitHub 링크](#)|               |
+| **강태화** |  팀장 | [GitHub 링크](#)| 아키텍쳐 구조 설게, 휴가/출석대장 작성법과 과정시간표 데이터 수집 및 임베딩, Langchain 통합 |
+| **정혜린** |  팀원 | [https://github.com/jhyerin31](#) | 온라인 강의 데이터 수집 및 임베딩, LCEL 구현  |
+| **정인복** |  팀원 | [GitHub 링크](#)| 내일배움카드 관련 법령 데이터 수집 및 임베딩, 프롬프트 출력 요약 |
+| **진우재** |  팀원 | [GitHub 링크](#)|            |
+| **박진신** |  팀원 | [GitHub 링크](#)|               |
 
 ---
 
@@ -26,7 +26,7 @@ RAG(Retrieval-Augmented Generation) 구조를 바탕으로 문서 검색 및 응
 LangChain 기반 패스트캠퍼스/Upstage AI Lab 6기 과정 전반적인 QA 시스템의 구축 및 운영을 위한 파이프라인입니다.
 
 ## **1. 비즈니스 문제 정의**
-- 다양한 소스로 존재하는 여러 문서들을 필요 시 마다 어디있는지, 어떻게 작성해야하는지 등 일일이 찾는것에 대한 번거로움을 느낌 
+- 다양한 소스로 존재하는 여러 문서들을 필요 시 마다 찾는것에 대한 번거로움을 느낌 
 - 부트캠프 수강과 관련된 QA Engine 생성으로 업무 효율성 증대 기대
 
 ## **2. 데이터 수집 및 전처리**
@@ -44,26 +44,6 @@ LangChain 기반 패스트캠퍼스/Upstage AI Lab 6기 과정 전반적인 QA �
 - Chain 구성: Embedding → Retriever → LLM(응답)
 - LLM: OpenAI GPT-4 / UpstageChat 등 선택 가능
 
-## **4. 모델 학습 및 실험 추적**
-- 필요 시, 사내 문서로 파인튜닝된 LLM 학습
-- MLflow를 통해 실험, 하이퍼파라미터, 모델 버전 관리
-- Optuna / Weights & Biases 연동 가능
-
-## **5. 실행 환경 구성**
-1. **FastAPI 기반 API 서버 구성 (옵션)**
-2. **Docker로 로컬 환경에서 통합 실행 가능**
-3. **터미널 기반 CLI로 즉시 테스트 가능**
-4. **로컬 또는 클라우드 환경(AWS EC2 등) 모두 지원**
-
-## **6. 모니터링 및 재학습 루프**
-1. **모델 성능 모니터링**
-   - Prometheus, Grafana를 통한 응답 시간 및 정확도 트래킹
-2. **데이터 Drift 탐지**
-   - Evidently AI 활용
-3. **사용자 피드백 루프**
-   - 사용자의 thumbs-up/down 기록을 통해 성능 개선
-   - 재학습 조건 충족 시 자동 트리거되는 학습 파이프라인 구성
-
 ---
 
 ## **프로젝트 실행 방법**
@@ -77,12 +57,14 @@ git clone https://github.com/your-org/langchain-qa-project.git
 cd langchain-qa-project
 
 # 2. 가상환경 설정 및 패키지 설치
-python -m venv venv
+python -m venv QAEngine
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # 3. 환경 변수 설정
 export OPENAI_API_KEY=your-api-key
+export UPSTAGE_API_KEY=your-api-key
+export HUGGINGFACEHUB_API_KEY=your-api-key
 
 # 4. 실행
 python main.py
@@ -103,10 +85,6 @@ python main.py
 
 ### **사용 도구**
 - **LLM 통합:** LangChain, OpenAI API, HuggingFace
-- **실험 관리:** MLflow, Optuna
-- **데이터 관리:** DVC, AWS S3
-- **모니터링:** Prometheus, Grafana, ELK Stack
-- **배포 및 운영:** Docker, Kubernetes, Helm
 
 ---
 
@@ -120,20 +98,13 @@ python main.py
 
 프로젝트 진행 중 담당 강사님과의 피드백 세션을 통해 얻은 주요 인사이트는 다음과 같습니다.
 
-### 📌 **1차 피드백 (YYYY.MM.DD)**
-- **LangChain Retriever 선택 기준 설명이 부족**  
-  → 다양한 Retriever 종류에 대해 비교 분석하고, 왜 특정 벡터 DB(RAG with FAISS 등)를 선택했는지 근거 추가.
-- **실제 유저 시나리오 고려 부족**  
-  → 단순 기술 데모를 넘어서, 사용자의 입력 방식, 오답 처리 UX 흐름까지 고려한 API 설계 제안.
+### 📌 **1차 피드백 (2025.04.02)**
+- **LangChain Retriever 선택 기준에 대한 설명 및 근거**  
+  → 다양한 Chunking size에 대해 비교 분석하고, 왜 특정 벡터 DB(FAISS, Chroma)를 선택했는지 근거 추가.
 
-### 📌 **2차 피드백 (YYYY.MM.DD)**
-- **MLOps 구성요소 간 연결 시각화 부족**  
-  → MLflow, DVC, CI/CD, 모니터링 툴들이 어떻게 유기적으로 연결되는지 다이어그램 추가.
-- **재학습(Loop) 조건 불명확**  
-  → 어떤 기준으로 재학습이 트리거되는지 수치 기반 조건 정리 필요 (예: 정확도 70% 미만 시 재학습 등).
+### 📌 **2차 피드백 (2025.04.03)**
+- **Routing 적용해보기**  
 
-### 📌 **3차 피드백 (YYYY.MM.DD)**
-- **API 보안 및 접근 제어 미흡**  
-  → 인증 토큰 기반 접근 제어 및 요청 제한 정책 도입 제안.
+### 📌 **3차 피드백 (2025.04.04)**
 - **프롬프트 설계 최적화 피드백**  
   → 단순 질문-응답 프롬프트가 아닌, 문맥 유지형 시스템 메시지 설계 제안.
